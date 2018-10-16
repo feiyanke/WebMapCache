@@ -1,5 +1,4 @@
 app:
-  aaa: 123
   maps:
     -
       cachePath:  d://mapcache
