@@ -8,21 +8,8 @@ import java.util.List;
 @Component
 @ConfigurationProperties("app")
 public class MapCacheConfig {
-    private String aaa;
-    private String bbb;
+
     private List<MapConfig> maps;
-
-    public String getBbb() {
-        return bbb;
-    }
-
-    public void setBbb(String bbb) {
-        this.bbb = bbb;
-    }
-
-    public void setAaa(String aaa) {
-        this.aaa = aaa;
-    }
 
     public List<MapConfig> getMaps() {
         return maps;
@@ -69,5 +56,10 @@ class MapConfig {
 
     public void setFeatureInfoUrl(String featureInfoUrl) {
         this.featureInfoUrl = featureInfoUrl;
+    }
+
+    public boolean checkTileUri(String uri) {
+        //TODO
+        return true;
     }
 }
