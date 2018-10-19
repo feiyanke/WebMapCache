@@ -1,19 +1,14 @@
 package io.my.webmapcache;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriTemplate;
-import org.springframework.web.util.UrlPathHelper;
 
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @Component
 @ConfigurationProperties("app")
@@ -49,13 +44,11 @@ class MapConfig {
     private String capabilityUrl;
     private String tileUrl;
     private String featureInfoUrl;
+    private String tileType;
 
-    @Getter
     private UriTemplate tileUriTemplate;
-    @Getter
-    private URL capabilityURL;
-    @Getter
-    private URL featureInfoURL;
+    private URL capURL;
+    private URL featureURL;
 
     public String getCachePath() {
         return cachePath;
@@ -71,7 +64,7 @@ class MapConfig {
 
     public void setCapabilityUrl(String capabilityUrl) throws MalformedURLException {
         this.capabilityUrl = capabilityUrl;
-        this.capabilityURL = new URL(capabilityUrl);
+        this.capURL = new URL(capabilityUrl);
     }
 
     public String getTileUrl() {
@@ -89,19 +82,19 @@ class MapConfig {
 
     public void setFeatureInfoUrl(String featureInfoUrl) throws MalformedURLException {
         this.featureInfoUrl = featureInfoUrl;
-        this.featureInfoURL = new URL(featureInfoUrl);
+        this.featureURL = new URL(featureInfoUrl);
     }
 
     //if match, return params, else return null
-    private MapParams checkTileUri(String url) {
-        Map<String, String> map = tileUriTemplate.match(url);
+    private MapParams checkTileUri(String uri) {
+        Map<String, String> map = tileUriTemplate.match(uri);
         if (map.size() != 3) {
             return null;
         }
-        String localPath = String.format("%s//L%s//R%s//C%s", cachePath, map.get("z"), map.get("x"), map.get("y"));
+        String localPath = String.format("%s\\L%s\\R%s\\C%s", cachePath, map.get("z"), map.get("x"), map.get("y"));
         String sourceUrl = null;
         try {
-            sourceUrl = new URL(tileUrl).getHost() + new URL(url).getPath();
+            sourceUrl = new URL(tileUrl).getHost() + new URL(uri).getPath();
         } catch (MalformedURLException e) {
             e.printStackTrace();
             return null;
@@ -112,7 +105,7 @@ class MapConfig {
     private MapParams checkCapabilityUrl(String url) {
         try {
             String uri = new URL(url).getPath();
-            if (capabilityURL.getPath().equals(uri)) {
+            if (capURL.getPath().equals(uri)) {
                 String localPath = String.format("%s/GetCapability", cachePath);
                 return new MapParams(localPath, capabilityUrl);
             } else return null;
@@ -125,7 +118,7 @@ class MapConfig {
     private MapParams checkFeatureInfoUrl(String url) {
         try {
             String uri = new URL(url).getPath();
-            if (capabilityURL.getPath().equals(uri)) {
+            if (capURL.getPath().equals(uri)) {
                 String localPath = String.format("%s/GetFeatureInfo", cachePath);
                 return new MapParams(localPath, featureInfoUrl);
             } else return null;
@@ -146,5 +139,13 @@ class MapConfig {
         }
         result = checkFeatureInfoUrl(url);
         return result;
+    }
+
+    public String getTileType() {
+        return tileType;
+    }
+
+    public void setTileType(String tileType) {
+        this.tileType = tileType;
     }
 }

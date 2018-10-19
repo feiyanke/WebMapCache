@@ -19,6 +19,9 @@ import java.util.Map;
 @Component
 public class InitRunner implements CommandLineRunner {
 
+
+    //https://api.tiles.mapbox.com/v4/mapbox.streets/12/2047/1362.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw
+    //https://localhost:8080/v4/mapbox.streets/12/2047/1362.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw
     @Override
     public void run(String... args) throws Exception {
         log.debug("11111111111111");
