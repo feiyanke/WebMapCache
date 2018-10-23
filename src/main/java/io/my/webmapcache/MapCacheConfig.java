@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriTemplate;
 
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
@@ -30,9 +31,9 @@ class MapParams {
     @Getter
     private String localPath;
     @Getter
-    private String sourceUrl;
+    private URL sourceUrl;
 
-    MapParams(String path, String url) {
+    MapParams(String path, URL url) {
         this.localPath = path;
         this.sourceUrl = url;
     }
@@ -47,6 +48,7 @@ class MapConfig {
     private String tileType;
 
     private UriTemplate tileUriTemplate;
+    private UriTemplate tileUriMatchTemplate;
     private URL capURL;
     private URL featureURL;
 
@@ -73,7 +75,8 @@ class MapConfig {
 
     public void setTileUrl(String tileUrl) throws MalformedURLException {
         this.tileUrl = tileUrl;
-        this.tileUriTemplate = new UriTemplate(new URL(tileUrl).getPath());
+        this.tileUriTemplate = new UriTemplate(tileUrl);
+        this.tileUriMatchTemplate = new UriTemplate(new URL(tileUrl).getPath());
     }
 
     public String getFeatureInfoUrl() {
@@ -87,14 +90,15 @@ class MapConfig {
 
     //if match, return params, else return null
     private MapParams checkTileUri(String uri) {
-        Map<String, String> map = tileUriTemplate.match(uri);
+        Map<String, String> map = tileUriMatchTemplate.match(uri);
         if (map.size() != 3) {
             return null;
         }
         String localPath = String.format("%s\\L%s\\R%s\\C%s", cachePath, map.get("z"), map.get("x"), map.get("y"));
-        String sourceUrl = null;
+        URL sourceUrl = null;
         try {
-            sourceUrl = new URL(tileUrl).getHost() + new URL(uri).getPath();
+            sourceUrl = tileUriTemplate.expand(map).toURL();
+//            sourceUrl = new URL(tileUrl).getHost() + new URL(uri).getPath();
         } catch (MalformedURLException e) {
             e.printStackTrace();
             return null;
@@ -107,7 +111,7 @@ class MapConfig {
             String uri = new URL(url).getPath();
             if (capURL.getPath().equals(uri)) {
                 String localPath = String.format("%s/GetCapability", cachePath);
-                return new MapParams(localPath, capabilityUrl);
+                return new MapParams(localPath, capURL);
             } else return null;
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -118,9 +122,9 @@ class MapConfig {
     private MapParams checkFeatureInfoUrl(String url) {
         try {
             String uri = new URL(url).getPath();
-            if (capURL.getPath().equals(uri)) {
+            if (featureURL.getPath().equals(uri)) {
                 String localPath = String.format("%s/GetFeatureInfo", cachePath);
-                return new MapParams(localPath, featureInfoUrl);
+                return new MapParams(localPath, featureURL);
             } else return null;
         } catch (MalformedURLException e) {
             e.printStackTrace();

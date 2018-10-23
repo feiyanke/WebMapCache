@@ -67,7 +67,7 @@ public class MapCacheController {
                             .body(com.google.common.io.Files.toByteArray(file));
                 } else {
                     //4. proxy request to the web map, and get the tile.
-                    URL source = new URL(params.getSourceUrl());
+                    URL source = params.getSourceUrl();
                     HttpURLConnection connection = (HttpURLConnection) source.openConnection();
                     connection.setRequestMethod("GET");
                     connection.setConnectTimeout(2000);

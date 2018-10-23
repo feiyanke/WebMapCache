@@ -30,7 +30,8 @@ public class InitRunner implements CommandLineRunner {
 //        String ext = jpg.getExtension();
 
         //D:\2723
-
-        log.debug("ext");
+        UriTemplate template = new UriTemplate("/111/cc");
+        Map<String, String> map = template.match("/111/c");
+        log.debug(map.toString());
     }
 }

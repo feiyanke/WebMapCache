@@ -1,9 +1,9 @@
 app:
   maps:
     -
-      cachePath:  d://mapcache
+      cachePath:  d:\mapcache
       tileUrl: https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw
       tileType: png
     -
-      cachePath:  d://mapcache1
+      cachePath:  d:\mapcache1
       tileUrl: https://api.tiles.mapbox.com/v3/mapbox.streets/{z}/{x}/{y}.png
