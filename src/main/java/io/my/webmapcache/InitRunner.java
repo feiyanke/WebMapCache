@@ -3,6 +3,7 @@ package io.my.webmapcache;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tika.mime.MimeType;
 import org.apache.tika.mime.MimeTypes;
+import org.apache.tika.mime.MimeTypesFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponents;
@@ -25,6 +26,7 @@ public class InitRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         log.debug("11111111111111");
+
 //        MimeTypes allTypes = MimeTypes.getDefaultMimeTypes();
 //        MimeType jpg = allTypes.forName("image/png");
 //        String ext = jpg.getExtension();
